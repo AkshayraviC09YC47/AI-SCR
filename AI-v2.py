@@ -6,8 +6,8 @@ Scans a folder recursively, sends each source file to the Ollama model via CLI,
 and requests strict JSON output describing vulnerabilities.
 
 Outputs:
- - per-file JSON results saved to <INPUT_FOLDER>/SCR-SCANNER-RESULT/RESULT__<path>.json
- - combined pretty JSON report: <INPUT_FOLDER>/vulnerability_report.json
+ - Per-file JSON results saved to <INPUT_FOLDER>/SCR-SCANNER-RESULT/RESULT__<path>.json
+ - Combined pretty JSON report: <INPUT_FOLDER>/vulnerability_report.json
 """
 
 import os
