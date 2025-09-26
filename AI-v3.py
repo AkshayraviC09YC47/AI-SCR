@@ -17,8 +17,8 @@ import re
 from collections import Counter
 
 # === CONFIG ===
-#MODEL_NAME = "rohits/codellama_finetuned:latest"
-MODEL_NAME = "ovftank/unisast:latest"
+MODEL_NAME = "rohits/codellama_finetuned:latest"
+#MODEL_NAME = "ovftank/unisast:latest"
 
 SKIP_EXTENSIONS = [
     ".html", ".css", ".md", ".txt", ".json",
@@ -38,6 +38,7 @@ $$ |  $$ |  $$ |        $$\   $$ |$$ |  $$\ $$ |  $$ |
 $$ |  $$ |$$$$$$\       \$$$$$$  |\$$$$$$  |$$ |  $$ |
 \__|  \__|\______|       \______/  \______/ \__|  \__|
 
+          -----> Powered By Ollama <-----
 """
 
 def should_skip(file_name: str) -> bool:
@@ -163,7 +164,7 @@ def scan_file_and_save(base_folder: str, results_folder: str, file_path: str):
         return None
 
     prompt = build_prompt(file_path, code)
-    print(f"[!] Running model for: {file_path}")
+    print(f"[+] Running model for: {file_path}")
     raw_out = run_ollama_cli(prompt)
 
     parsed = extract_json_from_text(raw_out)
@@ -235,6 +236,7 @@ def main():
     os.system("clear")
     print(ascii_banner)
     print("[+] Model Using:",MODEL_NAME)
+    print("[+] Started Scanning On Folder:",input_folder)
     print(f"[+] Found {len(files)} files. Extensions: {', '.join(ext_counter.keys())}")
 
     for idx, fpath in enumerate(files, start=1):
