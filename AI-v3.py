@@ -243,6 +243,9 @@ def main():
         print(f"[+] ({idx}/{len(files)}) scanning: {fpath}")
         scan_file_and_save(input_folder, results_folder, fpath)
 
-
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n[+] Scan terminated by user. Goodbye!")
+        exit(0)
