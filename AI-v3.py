@@ -28,6 +28,17 @@ RESULTS_SUBFOLDER = "SCR-SCANNER-RESULT"
 CHUNK_SIZE = 16000  # chars per chunk (for future chunking)
 # ==================
 
+ascii_banner = r"""
+ $$$$$$\  $$$$$$\        $$$$$$\   $$$$$$\  $$$$$$$\  
+$$  __$$\ \_$$  _|      $$  __$$\ $$  __$$\ $$  __$$\ 
+$$ /  $$ |  $$ |        $$ /  \__|$$ /  \__|$$ |  $$ |
+$$$$$$$$ |  $$ |        \$$$$$$\  $$ |      $$$$$$$  |
+$$  __$$ |  $$ |         \____$$\ $$ |      $$  __$$< 
+$$ |  $$ |  $$ |        $$\   $$ |$$ |  $$\ $$ |  $$ |
+$$ |  $$ |$$$$$$\       \$$$$$$  |\$$$$$$  |$$ |  $$ |
+\__|  \__|\______|       \______/  \______/ \__|  \__|
+
+"""
 
 def should_skip(file_name: str) -> bool:
     return any(file_name.lower().endswith(ext) for ext in SKIP_EXTENSIONS)
@@ -221,6 +232,8 @@ def main():
 
     exts = [os.path.splitext(f)[1] for f in files]
     ext_counter = Counter(exts)
+    os.system("clear")
+    print(ascii_banner)
     print("[+] Model Using:",MODEL_NAME)
     print(f"[+] Found {len(files)} files. Extensions: {', '.join(ext_counter.keys())}")
 
