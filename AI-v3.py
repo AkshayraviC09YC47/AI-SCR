@@ -17,7 +17,9 @@ import re
 from collections import Counter
 
 # === CONFIG ===
-MODEL_NAME = "rohits/codellama_finetuned:latest"
+#MODEL_NAME = "rohits/codellama_finetuned:latest"
+MODEL_NAME = "ovftank/unisast:latest"
+
 SKIP_EXTENSIONS = [
     ".html", ".css", ".md", ".txt", ".json",
     ".jpg", ".png", ".gif", ".ico", ".svg", ".git"
@@ -96,12 +98,12 @@ def run_ollama_cli(prompt: str) -> str:
             check=False
         )
         if proc.returncode != 0:
-            return f"[ERROR_CLI] returncode={proc.returncode} stderr={proc.stderr.strip()}"
+            return f"[!] returncode={proc.returncode} stderr={proc.stderr.strip()}"
         return proc.stdout.strip()
     except FileNotFoundError:
-        return "[ERROR_CLI] 'ollama' CLI not found. Ensure ollama is installed and on PATH."
+        return "[!] 'ollama' CLI not found. Ensure ollama is installed and on PATH."
     except Exception as e:
-        return f"[ERROR_CLI] Exception running ollama: {e}"
+        return f"[!] Exception running ollama: {e}"
 
 
 def extract_json_from_text(text: str):
@@ -150,7 +152,7 @@ def scan_file_and_save(base_folder: str, results_folder: str, file_path: str):
         return None
 
     prompt = build_prompt(file_path, code)
-    print(f"[INFO] Running model for: {file_path}")
+    print(f"[!] Running model for: {file_path}")
     raw_out = run_ollama_cli(prompt)
 
     parsed = extract_json_from_text(raw_out)
@@ -206,7 +208,7 @@ def main():
 
     input_folder = os.path.abspath(args.folder)
     if not os.path.isdir(input_folder):
-        print(f"[FATAL] folder not found: {input_folder}")
+        print(f"[!] folder not found: {input_folder}")
         return
 
     results_folder = os.path.join(input_folder, RESULTS_SUBFOLDER)
@@ -219,6 +221,7 @@ def main():
 
     exts = [os.path.splitext(f)[1] for f in files]
     ext_counter = Counter(exts)
+    print("[+] Model Using:",MODEL_NAME)
     print(f"[+] Found {len(files)} files. Extensions: {', '.join(ext_counter.keys())}")
 
     for idx, fpath in enumerate(files, start=1):
