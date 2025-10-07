@@ -271,8 +271,8 @@
                                 <span class="badge ${badgeClass}">${result.Severity} Severity</span>
                             </div>
                             <p class="card-text"><strong>File:</strong> <code>${result.file}</code></p>
-                            <p class="card-text"><strong>Location:</strong> Lines ${result['Vulnerable Code line number']}</p>
-                            <h6 class="mt-3">Vulnerable Code (Decoded):</h6>
+                            <p class="card-text"><strong>Line Number:</strong> ${result['Vulnerable Code line number']}</p>
+                            <h6 class="mt-3">Vulnerable Code:</h6>
                             <pre class="code-snippet mb-3">${decodedCode}</pre>
                             <h6>Mitigation:</h6>
                             <div class="alert alert-success">
