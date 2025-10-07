@@ -162,8 +162,8 @@
                 <div class="report-meta">
                     <strong>Scan Path:</strong> <span id="scanPath"></span> &nbsp;|&nbsp;
                     <strong>Model:</strong> <span id="modelName"></span> &nbsp;|&nbsp;
-                    <strong>Files Scanned:</strong> <span id="totalFiles"></span> &nbsp;|&nbsp;
-                    <strong>Generated:</strong> <span id="generationDate"></span>
+                    <strong>Files Scanned:</strong> <span id="totalFiles"></span> &nbsp;
+                     <!--  <strong>Generated:</strong> <span id="generationDate"></span> -->
                 </div>
             </div>
         </div>
@@ -229,7 +229,7 @@
                 document.getElementById('scanPath').textContent = data.folder;
                 document.getElementById('modelName').textContent = data.model;
                 document.getElementById('totalFiles').textContent = data.total_files_scanned;
-                document.getElementById('generationDate').textContent = new Date().toLocaleDateString();
+               // document.getElementById('generationDate').textContent = new Date().toLocaleDateString();
                 document.getElementById('totalIssues').textContent = data.total_issues_identified;
                 document.getElementById('criticalIssues').textContent = data.critical_severity_issues;
                 document.getElementById('highIssues').textContent = data.high_severity_issues;
