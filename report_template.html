@@ -127,7 +127,15 @@
         .severity-critical { border-left: 4px solid var(--critical-color); background-color: rgba(220, 53, 69, 0.05);}
         .vulnerability-card { transition: transform 0.2s; margin-bottom: 1.5rem;}
         .vulnerability-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
-        .code-snippet { background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 0.375rem; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.875rem; white-space: pre-wrap; word-break: break-all;}
+        .code-snippet {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
@@ -242,9 +250,7 @@
                             <p class="card-text"><strong>File:</strong> <code>${result.file}</code></p>
                             <p class="card-text"><strong>Location:</strong> Lines ${result['Vulnerable Code line number']}</p>
                             <h6 class="mt-3">Vulnerable Code (Decoded):</h6>
-                            <div class="code-snippet mb-3">
-                                ${decodedCode}
-                            </div>
+                            <pre class="code-snippet mb-3">${decodedCode}</pre>
                             <h6>Mitigation:</h6>
                             <div class="alert alert-success">
                                 ${result.Mitigation}
