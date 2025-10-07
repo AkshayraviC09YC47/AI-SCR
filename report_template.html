@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Vulnerability Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --critical-color: #dc3545;
+            --high-color: #fd7e14;
+            --medium-color: #ffc107;
+            --low-color: #198754;
+            --header-bg: #fff;
+            --header-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+        }
+
+        body {
+            background: #f4f6fb;
+        }
+
+        .company-header {
+            background: var(--header-bg);
+            box-shadow: var(--header-shadow);
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem 2rem 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .company-logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+        }
+        .company-info h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: #333;
+        }
+        .company-info p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 0.2rem;
+        }
+        .company-info .report-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .company-info .report-meta {
+            font-size: 0.98rem;
+            color: #888;
+        }
+
+        .summary-box {
+            border-radius: 0.75rem;
+            padding: 2rem 1.5rem;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(102, 126, 234, 0.07);
+        }
+        .summary-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .summary-cards {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .summary-card {
+            flex: 1 1 160px;
+            max-width: 180px;
+            min-width: 160px;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 6px rgba(102, 126, 234, 0.06);
+            text-align: center;
+            padding: 1.2rem 0.8rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.2s;
+        }
+        .summary-card:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
+        }
+        .summary-card .card-icon {
+            font-size: 2.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .summary-card.critical { border-top: 4px solid var(--critical-color); }
+        .summary-card.high { border-top: 4px solid var(--high-color); }
+        .summary-card.medium { border-top: 4px solid var(--medium-color); }
+        .summary-card.low { border-top: 4px solid var(--low-color); }
+        .summary-card .card-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .summary-card .card-text {
+            font-size: 1.05rem;
+            color: #555;
+        }
+
+        @media (max-width: 900px) {
+            .company-header { flex-direction: column; text-align: center; gap: 1rem; }
+            .company-logo { margin-bottom: 1rem; }
+            .summary-cards { gap: 1rem; }
+        }
+        @media (max-width: 600px) {
+            .summary-cards { flex-direction: column; align-items: stretch; }
+            .summary-card { max-width: 100%; }
+        }
+
+        /* Existing vulnerability card styles */
+        .severity-high { border-left: 4px solid var(--high-color); background-color: rgba(253, 126, 20, 0.05);}
+        .severity-critical { border-left: 4px solid var(--critical-color); background-color: rgba(220, 53, 69, 0.05);}
+        .vulnerability-card { transition: transform 0.2s; margin-bottom: 1.5rem;}
+        .vulnerability-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
+        .code-snippet { background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 0.375rem; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.875rem; white-space: pre-wrap; word-break: break-all;}
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Company Header -->
+        <div class="company-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Justdial_Logo.svg" alt="Justdial Logo" class="company-logo">
+            <div class="company-info">
+                <div class="report-title">AI Source Code Vulnerability Report</div>
+                <p>Comprehensive security analysis powered by AI</p>
+                <div class="report-meta">
+                    <strong>Scan Path:</strong> <span id="scanPath"></span> &nbsp;|&nbsp;
+                    <strong>Model:</strong> <span id="modelName"></span> &nbsp;|&nbsp;
+                    <strong>Files Scanned:</strong> <span id="totalFiles"></span> &nbsp;|&nbsp;
+                    <strong>Generated:</strong> <span id="generationDate"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="summary-box mb-5">
+            <div class="summary-title">📊 Executive Summary</div>
+            <div class="summary-cards">
+                <div class="summary-card critical">
+                    <div class="card-icon" style="color:var(--critical-color)">&#9888;</div>
+                    <div class="card-title" id="criticalIssues">0</div>
+                    <div class="card-text">Critical Issues</div>
+                </div>
+                <div class="summary-card high">
+                    <div class="card-icon" style="color:var(--high-color)">&#128165;</div>
+                    <div class="card-title" id="highIssues">0</div>
+                    <div class="card-text">High Severity</div>
+                </div>
+                <div class="summary-card medium">
+                    <div class="card-icon" style="color:var(--medium-color)">&#128308;</div>
+                    <div class="card-title" id="mediumIssues">0</div>
+                    <div class="card-text">Medium Severity</div>
+                </div>
+                <div class="summary-card low">
+                    <div class="card-icon" style="color:var(--low-color)">&#128994;</div>
+                    <div class="card-title" id="lowIssues">0</div>
+                    <div class="card-text">Low Severity</div>
+                </div>
+                <div class="summary-card" style="border-top:4px solid #667eea;">
+                    <div class="card-icon text-warning">&#128202;</div>
+                    <div class="card-title" id="totalIssues">0</div>
+                    <div class="card-text">Total Issues</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vulnerability Results -->
+        <h2 class="h3 mb-3">🔍 Detailed Vulnerability Analysis</h2>
+        <div id="vulnerabilityResults">
+            <!-- Results will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Base64 decoding function
+        function decodeBase64(str) {
+            if (!str) return "<em>No code provided</em>";
+            try {
+                return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+                return `Base64 Decoding Error: ${e.message}\nOriginal: ${str}`;
+            }
+        }
+
+        // Load and process JSON data from API
+        async function loadVulnerabilityData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                const data = await response.json();
+
+                // Update summary information
+                document.getElementById('scanPath').textContent = data.folder;
+                document.getElementById('modelName').textContent = data.model;
+                document.getElementById('totalFiles').textContent = data.total_files_scanned;
+                document.getElementById('generationDate').textContent = new Date().toLocaleDateString();
+                document.getElementById('totalIssues').textContent = data.total_issues_identified;
+                document.getElementById('criticalIssues').textContent = data.critical_severity_issues;
+                document.getElementById('highIssues').textContent = data.high_severity_issues;
+                document.getElementById('mediumIssues').textContent = data.medium_severity_issues;
+                document.getElementById('lowIssues').textContent = data.low_severity_issues;
+
+                // Process and display vulnerabilities
+                const resultsContainer = document.getElementById('vulnerabilityResults');
+                resultsContainer.innerHTML = ""; // Clear previous results
+
+                if (!data.results || data.results.length === 0) {
+                    resultsContainer.innerHTML = `<div class="alert alert-info">No vulnerabilities found.</div>`;
+                    return;
+                }
+
+                data.results.forEach((result, index) => {
+                    const decodedCode = decodeBase64(result['Vulnerable Code']);
+                    const severityClass = result.Severity === 'Critical' ? 'severity-critical'
+                        : result.Severity === 'High' ? 'severity-high'
+                        : result.Severity === 'Medium' ? 'severity-medium'
+                        : 'severity-low';
+                    const badgeClass = result.Severity === 'Critical' ? 'bg-danger'
+                        : result.Severity === 'High' ? 'bg-warning'
+                        : result.Severity === 'Medium' ? 'bg-info'
+                        : 'bg-success';
+
+                    const vulnerabilityCard = document.createElement('div');
+                    vulnerabilityCard.className = `card vulnerability-card ${severityClass}`;
+                    vulnerabilityCard.innerHTML = `
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title">${result['Vulnerability Title']}</h5>
+                                <span class="badge ${badgeClass}">${result.Severity} Severity</span>
+                            </div>
+                            <p class="card-text"><strong>File:</strong> <code>${result.file}</code></p>
+                            <p class="card-text"><strong>Location:</strong> Lines ${result['Vulnerable Code line number']}</p>
+                            <h6 class="mt-3">Vulnerable Code (Decoded):</h6>
+                            <div class="code-snippet mb-3">
+                                ${decodedCode}
+                            </div>
+                            <h6>Mitigation:</h6>
+                            <div class="alert alert-success">
+                                ${result.Mitigation}
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(vulnerabilityCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading vulnerability data:', error);
+                document.getElementById('vulnerabilityResults').innerHTML = `
+                    <div class="alert alert-danger">
+                        Error loading vulnerability data: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Load data on page ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const apiUrl = 'http://localhost:1336/Combined_result.json';
+            loadVulnerabilityData(apiUrl);
+        });
+    </script>
+</body>
+</html>
