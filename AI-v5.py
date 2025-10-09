@@ -16,6 +16,7 @@ import json
 import re
 import base64
 from collections import Counter
+import sys
 
 # === CONFIG ===
 
@@ -242,6 +243,34 @@ def scan_file_and_save(base_folder: str, results_folder: str, file_path: str):
     return normalized
 
 
+def validate_model(model_name):
+    try:
+        proc = subprocess.run(
+            ["ollama", "list"],
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        if proc.returncode != 0:
+            print("[!] Failed to run 'ollama list'. Is Ollama installed?")
+            sys.exit(1)
+        lines = proc.stdout.strip().splitlines()
+        available_models = []
+        for line in lines[1:]:  # Skip header
+            parts = line.split()
+            if parts:
+                available_models.append(parts[0])
+        if model_name not in available_models:
+            print(f"[!] Model '{model_name}' not found in Ollama list.")
+            print("Available models:")
+            for m in available_models:
+                print(" -", m)
+            sys.exit(1)
+    except Exception as e:
+        print(f"[!] Error validating model: {e}")
+        sys.exit(1)
+
+
 def main():
     parser = argparse.ArgumentParser(description="AI scanner -> JSON output")
     parser.add_argument("--folder", required=True, help="Path to source folder to scan")
@@ -254,6 +283,8 @@ def main():
         return
     global MODEL_NAME
     MODEL_NAME = args.model
+
+    validate_model(MODEL_NAME)
 
     results_folder = os.path.join(input_folder, RESULTS_SUBFOLDER)
     os.makedirs(results_folder, exist_ok=True)
