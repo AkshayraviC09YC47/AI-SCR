@@ -18,9 +18,8 @@ import base64
 from collections import Counter
 
 # === CONFIG ===
-#MODEL_NAME = "rohits/codellama_finetuned:latest"
-MODEL_NAME = "ovftank/unisast:latest"
-#MODEL_NAME = "deepseek-coder:33b"
+
+#MODEL_NAME = "ovftank/unisast:latest"
 
 SKIP_EXTENSIONS = [
     ".html", ".css", ".md", ".txt", ".json",
@@ -246,12 +245,15 @@ def scan_file_and_save(base_folder: str, results_folder: str, file_path: str):
 def main():
     parser = argparse.ArgumentParser(description="AI scanner -> JSON output")
     parser.add_argument("--folder", required=True, help="Path to source folder to scan")
+    parser.add_argument("--model", required=True, help="Ollama model name to use (e.g. ovftank/unisast:latest)")
     args = parser.parse_args()
 
     input_folder = os.path.abspath(args.folder)
     if not os.path.isdir(input_folder):
         print(f"[!] folder not found: {input_folder}")
         return
+    global MODEL_NAME
+    MODEL_NAME = args.model
 
     results_folder = os.path.join(input_folder, RESULTS_SUBFOLDER)
     os.makedirs(results_folder, exist_ok=True)
